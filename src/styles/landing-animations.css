@@ -28,63 +28,65 @@
 
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.8));
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    opacity: 0.75;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
   }
 }
+
 
 /* Dot animation container */
 .dot-orbit {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 0;
+  height: 0;
   left: 50%;
   top: 50%;
-  margin-left: -60px;
-  margin-top: -60px;
+  transform-origin: center center;
   animation: orbit 8s linear infinite;
 }
+
 
 /* Individual dot styling */
 .dot {
   position: absolute;
   width: 12px;
   height: 12px;
+  top: -6px;          /* center the dot vertically on the pivot   */
+  left: 114px;        /* orbit radius (120px) minus half dot (6px) */
   border-radius: 50%;
   background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
   animation: glow-pulse 2s ease-in-out infinite;
-  left: 0;
-  top: 0;
 }
 
 .dot:nth-child(odd) {
   background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
 }
 
-/* Pulse slow animation */
+/* Helper classes used in Landing.jsx JSX */
 .animate-pulse-slow {
   animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Float animation for title */
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .dot-orbit {
-    width: 80px;
-    height: 80px;
-    margin-left: -40px;
-    margin-top: -40px;
+  @keyframes orbit {
+    0%   { transform: rotate(0deg)   translateX(80px) rotate(0deg);   }
+    100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
   }
 
   .dot {
     width: 8px;
     height: 8px;
+    top: -4px;
+    left: 76px;   /* 80px radius - 4px half-width */
   }
 }
+
