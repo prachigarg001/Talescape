@@ -8,7 +8,7 @@ export default function Feed({ activeNav, user }) {
   if (activeNav === 'books') {
     return (
       <div className="px-8 py-6 space-y-6">
-        <h3 className="text-2xl font-bold text-white">My Books</h3>
+        <h3 className="text-2xl font-bold text-white">Books</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {mockStories.filter((s) => s.type === 'story').map((story) => (
             <StoryCard key={story.id} story={story} />

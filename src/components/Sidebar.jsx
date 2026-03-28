@@ -5,7 +5,7 @@ import { BookOpen } from 'lucide-react'
 export default function Sidebar({ sidebarOpen, setSidebarOpen, activeNav, setActiveNav, user, onLogout }) {
   const navItems = [
     { id: 'home', name: 'Dashboard', icon: Home },
-    { id: 'books', name: 'My Books', icon: BookMarked },
+    { id: 'books', name: 'Books', icon: BookMarked },
     { id: 'comics', name: 'Comics', icon: Plus },
     { id: 'poetry', name: 'Poetry', icon: Zap },
     { id: 'community', name: 'Community', icon: Home },
