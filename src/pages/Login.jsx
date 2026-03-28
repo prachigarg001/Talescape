@@ -12,8 +12,21 @@ export default function Login({ onLogin, onGoogleLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
+    // Generate random anonymous name if not provided
+    const getAnonymousName = () => {
+      if (username.trim()) return username
+      
+      const adjectives = ['Shadow', 'Cosmic', 'Silent', 'Mystical', 'Digital', 'Neon', 'Phoenix', 'Echo', 'Storm', 'Crystal', 'Twilight', 'Lunar', 'Solar', 'Nebula', 'Stellar', 'Quantum']
+      const nouns = ['Writer', 'Poet', 'Creator', 'Scribe', 'Dreamer', 'Sage', 'Voice', 'Mind', 'Heart', 'Soul', 'Wanderer', 'Explorer', 'Mystic', 'Sentinel', 'Oracle']
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)]
+      const noun = nouns[Math.floor(Math.random() * nouns.length)]
+      const num = Math.floor(Math.random() * 999)
+      return `${adj}${noun}${num}`
+    }
+    
     const userData = {
-      username: username || 'Anonymous',
+      username: getAnonymousName(),
       email,
       pfpColor,
       joinDate: new Date().toLocaleDateString(),
@@ -39,25 +52,26 @@ export default function Login({ onLogin, onGoogleLogin }) {
             </span>
           </div>
           <h1 className="text-3xl font-bold text-white">
-            {isSignUp ? 'Join Us' : 'Welcome Back'}
+            {isSignUp ? 'Create Your Identity' : 'Welcome Back'}
           </h1>
           <p className="text-dark-muted">
-            {isSignUp ? 'Create your poetic identity' : 'Continue your literary journey'}
+            {isSignUp ? 'Build your anonymous writer profile' : 'Continue your literary journey'}
           </p>
         </div>
 
         {/* Main Card */}
         <div className="glass rounded-2xl p-8 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Username Field */}
+            {/* Username/Anonymous Profile Field */}
             {isSignUp && (
               <div className="space-y-2">
-                <label className="text-sm text-dark-muted">Username (Optional)</label>
+                <label className="text-sm text-dark-muted">Create Your Anonymous Profile Name</label>
+                <p className="text-xs text-dark-muted/70">Choose any username to represent yourself (e.g., ShadowWriter, MysticPoet, NeonDreamer)</p>
                 <div className="relative">
                   <User className="absolute left-3 top-3 w-5 h-5 text-dark-muted" />
                   <input
                     type="text"
-                    placeholder="Choose a username"
+                    placeholder="e.g., ShadowWriter123 or EchoPoet"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="w-full bg-glass-lighter border border-dark-border rounded-lg pl-10 pr-4 py-3 text-white placeholder-dark-muted focus:outline-none focus:border-blue-400 transition-smooth"
@@ -115,7 +129,7 @@ export default function Login({ onLogin, onGoogleLogin }) {
 
             {/* Submit Button */}
             <button type="submit" className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-smooth font-semibold text-white">
-              {isSignUp ? 'Create Account' : 'Sign In'}
+              {isSignUp ? 'Create Anonymous Profile' : 'Sign In'}
             </button>
           </form>
 
@@ -150,8 +164,8 @@ export default function Login({ onLogin, onGoogleLogin }) {
               }}
               className="text-dark-muted hover:text-blue-400 transition-smooth"
             >
-              {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-              <span className="text-blue-400 font-semibold">{isSignUp ? 'Sign In' : 'Sign Up'}</span>
+              {isSignUp ? 'Already have a profile?' : "Don't have a profile yet?"}{' '}
+              <span className="text-blue-400 font-semibold">{isSignUp ? 'Sign In' : 'Create One'}</span>
             </button>
           </div>
         </div>
