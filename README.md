@@ -253,9 +253,7 @@ This project is open source and available under the MIT License.
 
 **Talescape Development Team**
 
-## Support
 
-For support, email support@talescape.app or open an issue on GitHub.
 
 ## Disclaimer
 
