@@ -1,0 +1,79 @@
+<script>
+(function() {
+    const logo = document.getElementById('talescapeCorner');
+
+    // Step 1: Animate logo (already done)
+    logo.addEventListener('animationend', () => {
+        logo.classList.add('final');
+
+        // Step 2: Show tagline
+        showTagline();
+    });
+
+    function showTagline() {
+        const tagline = document.createElement('div');
+        tagline.innerHTML = "✨ Creativity begins before identity ✨";
+        tagline.style.position = "fixed";
+        tagline.style.top = "60%";
+        tagline.style.left = "50%";
+        tagline.style.transform = "translate(-50%, -50%)";
+        tagline.style.fontSize = "1.2rem";
+        tagline.style.opacity = "0";
+        tagline.style.transition = "all 0.8s ease";
+        tagline.style.color = "#b9c3e6";
+        tagline.style.zIndex = "20";
+
+        document.body.appendChild(tagline);
+
+        setTimeout(() => {
+            tagline.style.opacity = "1";
+        }, 200);
+
+        // Step 3: Show loading bar
+        setTimeout(showLoader, 1200);
+    }
+
+    function showLoader() {
+        const loader = document.createElement('div');
+        loader.style.position = "fixed";
+        loader.style.bottom = "25%";
+        loader.style.left = "50%";
+        loader.style.transform = "translateX(-50%)";
+        loader.style.width = "200px";
+        loader.style.height = "6px";
+        loader.style.background = "rgba(255,255,255,0.1)";
+        loader.style.borderRadius = "10px";
+        loader.style.overflow = "hidden";
+        loader.style.zIndex = "20";
+
+        const progress = document.createElement('div');
+        progress.style.height = "100%";
+        progress.style.width = "0%";
+        progress.style.background = "linear-gradient(90deg, #3b82f6, #a855f7, #ec489a)";
+        progress.style.transition = "width 2s ease";
+
+        loader.appendChild(progress);
+        document.body.appendChild(loader);
+
+        setTimeout(() => {
+            progress.style.width = "100%";
+        }, 200);
+
+        // Step 4: Fade out + redirect
+        setTimeout(() => {
+            fadeOutAndRedirect();
+        }, 2500);
+    }
+
+    function fadeOutAndRedirect() {
+        document.body.style.transition = "opacity 1s ease";
+        document.body.style.opacity = "0";
+
+        setTimeout(() => {
+            // 👉 Change this to your dashboard page
+            window.location.href = "dashboard.html";
+        }, 1000);
+    }
+
+})();
+</script>

@@ -1,38 +1,52 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, Mail, Lock, User, Github, Chrome } from 'lucide-react'
+import { BookOpen, Lock, User, Github, Chrome } from 'lucide-react'
+import { generateAvatar } from '../services/avatarService'
 
 export default function Login({ onLogin, onGoogleLogin }) {
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
   const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [pfpColor, setPfpColor] = useState('bg-blue-500')
+  const [avatarPreview, setAvatarPreview] = useState(null)
+  const [avatarStyle, setAvatarStyle] = useState('discord')
 
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    // Generate random anonymous name if not provided
-    const getAnonymousName = () => {
-      if (username.trim()) return username
-      
-      const adjectives = ['Shadow', 'Cosmic', 'Silent', 'Mystical', 'Digital', 'Neon', 'Phoenix', 'Echo', 'Storm', 'Crystal', 'Twilight', 'Lunar', 'Solar', 'Nebula', 'Stellar', 'Quantum']
-      const nouns = ['Writer', 'Poet', 'Creator', 'Scribe', 'Dreamer', 'Sage', 'Voice', 'Mind', 'Heart', 'Soul', 'Wanderer', 'Explorer', 'Mystic', 'Sentinel', 'Oracle']
-      const adj = adjectives[Math.floor(Math.random() * adjectives.length)]
-      const noun = nouns[Math.floor(Math.random() * nouns.length)]
-      const num = Math.floor(Math.random() * 999)
-      return `${adj}${noun}${num}`
+    if (!username.trim() || !password.trim()) {
+      alert('Please fill in all fields')
+      return
     }
+
+    const avatarData = generateAvatar(username)
     
     const userData = {
-      username: getAnonymousName(),
-      email,
-      pfpColor,
+      username: username.trim(),
+      password: password,
+      avatarColor: avatarData.color,
+      avatarData: avatarData,
+      avatarStyle: avatarStyle,
       joinDate: new Date().toLocaleDateString(),
+      // Profile info to be filled in settings
+      bio: '',
+      realName: '',
+      anonymousName: '',
+      age: '',
+      birthDate: '',
     }
     onLogin(userData)
-    navigate('/dashboard')
+    // First time users redirected to account settings
+    navigate('/account-settings')
+  }
+
+  const handleUsernameChange = (e) => {
+    const newUsername = e.target.value
+    setUsername(newUsername)
+    if (newUsername.trim()) {
+      const avatar = generateAvatar(newUsername)
+      setAvatarPreview(avatar)
+    }
   }
 
   const handleGoogleLogin = () => {
@@ -52,46 +66,44 @@ export default function Login({ onLogin, onGoogleLogin }) {
             </span>
           </div>
           <h1 className="text-3xl font-bold text-white">
-            {isSignUp ? 'Create Your Identity' : 'Welcome Back'}
+            {isSignUp ? 'Create Account' : 'Welcome Back'}
           </h1>
           <p className="text-dark-muted">
-            {isSignUp ? 'Build your anonymous writer profile' : 'Continue your literary journey'}
+            {isSignUp ? 'Join the community of anonymous writers' : 'Continue your literary journey'}
           </p>
         </div>
 
         {/* Main Card */}
         <div className="glass rounded-2xl p-8 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Username/Anonymous Profile Field */}
-            {isSignUp && (
-              <div className="space-y-2">
-                <label className="text-sm text-dark-muted">Create Your Anonymous Profile Name</label>
-                <p className="text-xs text-dark-muted/70">Choose any username to represent yourself (e.g., ShadowWriter, MysticPoet, NeonDreamer)</p>
-                <div className="relative">
+            {/* Username Field */}
+            <div className="space-y-2">
+              <label className="text-sm text-dark-muted">Username</label>
+              <div className="flex gap-3">
+                <div className="relative flex-1">
                   <User className="absolute left-3 top-3 w-5 h-5 text-dark-muted" />
                   <input
                     type="text"
-                    placeholder="e.g., ShadowWriter123 or EchoPoet"
+                    placeholder="Choose your username"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={handleUsernameChange}
                     className="w-full bg-glass-lighter border border-dark-border rounded-lg pl-10 pr-4 py-3 text-white placeholder-dark-muted focus:outline-none focus:border-blue-400 transition-smooth"
                   />
                 </div>
-              </div>
-            )}
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="text-sm text-dark-muted">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 w-5 h-5 text-dark-muted" />
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-glass-lighter border border-dark-border rounded-lg pl-10 pr-4 py-3 text-white placeholder-dark-muted focus:outline-none focus:border-blue-400 transition-smooth"
-                />
+                {/* Avatar Preview */}
+                {(avatarPreview || username) && (
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-10 h-10 rounded-lg border-2 border-blue-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                      style={{
+                        background: avatarPreview?.color || '#3b82f6',
+                        boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)'
+                      }}
+                    >
+                      {username ? username.substring(0, 2).toUpperCase() : '?'}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -110,26 +122,30 @@ export default function Login({ onLogin, onGoogleLogin }) {
               </div>
             </div>
 
-            {/* PFP Color Selection */}
-            {isSignUp && (
-              <div className="space-y-2">
-                <label className="text-sm text-dark-muted">Profile Picture Color</label>
-                <div className="flex gap-3">
-                  {['bg-blue-500', 'bg-purple-500', 'bg-pink-500', 'bg-red-500', 'bg-green-500', 'bg-indigo-500'].map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => setPfpColor(color)}
-                      className={`w-8 h-8 rounded-full ${color} border-2 ${pfpColor === color ? 'border-white' : 'border-transparent'} transition-smooth`}
-                    />
-                  ))}
-                </div>
+            {/* Avatar Style Selection */}
+            <div className="space-y-2">
+              <label className="text-sm text-dark-muted">Choose Avatar Style</label>
+              <div className="grid grid-cols-4 gap-2">
+                {['discord', 'minecraft', 'gradient', 'neon'].map((style) => (
+                  <button
+                    key={style}
+                    type="button"
+                    onClick={() => setAvatarStyle(style)}
+                    className={`py-2 px-3 rounded-lg text-xs font-semibold transition-smooth capitalize border-2 ${
+                      avatarStyle === style
+                        ? 'border-blue-400 bg-blue-400/10 text-blue-300'
+                        : 'border-dark-border bg-glass-lighter text-dark-muted hover:border-blue-400/50'
+                    }`}
+                  >
+                    {style}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             {/* Submit Button */}
             <button type="submit" className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-smooth font-semibold text-white">
-              {isSignUp ? 'Create Anonymous Profile' : 'Sign In'}
+              {isSignUp ? 'Create Account' : 'Sign In'}
             </button>
           </form>
 
@@ -159,12 +175,13 @@ export default function Login({ onLogin, onGoogleLogin }) {
               onClick={() => {
                 setIsSignUp(!isSignUp)
                 setUsername('')
-                setEmail('')
                 setPassword('')
+                setAvatarPreview(null)
+                setAvatarStyle('discord')
               }}
               className="text-dark-muted hover:text-blue-400 transition-smooth"
             >
-              {isSignUp ? 'Already have a profile?' : "Don't have a profile yet?"}{' '}
+              {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
               <span className="text-blue-400 font-semibold">{isSignUp ? 'Sign In' : 'Create One'}</span>
             </button>
           </div>

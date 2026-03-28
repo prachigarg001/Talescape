@@ -3,6 +3,7 @@ import { Sparkles, Eye, Share2 } from 'lucide-react'
 import LikeButton from './LikeButton'
 import CommentSection from './CommentSection'
 import { mockStories, mockFollowingActivity, mockLeaderboard } from '../services/mockData'
+import { generateAvatar } from '../services/avatarService'
 
 export default function Feed({ activeNav, user }) {
   if (activeNav === 'books') {
@@ -50,20 +51,29 @@ export default function Feed({ activeNav, user }) {
         <div className="space-y-4">
           <h3 className="text-xl font-bold text-white">Community Activity</h3>
           <div className="space-y-3">
-            {mockFollowingActivity.map((activity, idx) => (
-              <div key={idx} className="glass rounded-lg p-4 flex items-center justify-between hover:bg-glass-light transition-smooth cursor-pointer">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
-                    {activity.name.charAt(0)}
+            {mockFollowingActivity.map((activity, idx) => {
+              const avatarData = generateAvatar(activity.name)
+              return (
+                <div key={idx} className="glass rounded-lg p-4 flex items-center justify-between hover:bg-glass-light transition-smooth cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div 
+                      className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold border border-blue-400/30"
+                      style={{
+                        background: avatarData.color,
+                        boxShadow: '0 0 8px rgba(59, 130, 246, 0.3)'
+                      }}
+                    >
+                      {activity.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{activity.name}</p>
+                      <p className="text-xs text-dark-muted">{activity.status}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">{activity.name}</p>
-                    <p className="text-xs text-dark-muted">{activity.status}</p>
-                  </div>
+                  <p className="text-xs text-dark-muted">{activity.time}</p>
                 </div>
-                <p className="text-xs text-dark-muted">{activity.time}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
@@ -83,21 +93,30 @@ export default function Feed({ activeNav, user }) {
     return (
       <div className="px-8 py-6 space-y-4">
         <h3 className="text-2xl font-bold text-white">Leaderboard</h3>
-        {mockLeaderboard.map((poet) => (
-          <div key={poet.rank} className="glass rounded-lg p-4 flex items-center justify-between hover:bg-glass-light transition-smooth cursor-pointer">
-            <div className="flex items-center gap-4">
-              <span className="text-2xl font-bold text-blue-400">#{poet.rank}</span>
-              <div className={`w-12 h-12 rounded-full ${poet.pfpColor} flex items-center justify-center text-white font-bold`}>
-                {poet.name.charAt(0)}
+        {mockLeaderboard.map((poet) => {
+          const avatarData = generateAvatar(poet.name)
+          return (
+            <div key={poet.rank} className="glass rounded-lg p-4 flex items-center justify-between hover:bg-glass-light transition-smooth cursor-pointer">
+              <div className="flex items-center gap-4">
+                <span className="text-2xl font-bold text-blue-400">#{poet.rank}</span>
+                <div 
+                  className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold border-2 border-blue-400/30"
+                  style={{
+                    background: avatarData.color,
+                    boxShadow: '0 0 12px rgba(59, 130, 246, 0.3)'
+                  }}
+                >
+                  {poet.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-semibold text-white">{poet.name}</p>
+                  <p className="text-xs text-dark-muted">{poet.points} points</p>
+                </div>
               </div>
-              <div>
-                <p className="font-semibold text-white">{poet.name}</p>
-                <p className="text-xs text-dark-muted">{poet.points} points</p>
-              </div>
+              {poet.badge && <span className="text-2xl">{poet.badge}</span>}
             </div>
-            {poet.badge && <span className="text-2xl">{poet.badge}</span>}
-          </div>
-        ))}
+          )
+        })}
       </div>
     )
   }
@@ -106,12 +125,19 @@ export default function Feed({ activeNav, user }) {
 }
 
 function StoryCard({ story }) {
+  const avatarData = generateAvatar(story.author)
   return (
     <div className="card-glass space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
-            {story.author.charAt(0)}
+          <div 
+            className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold border-2 border-blue-400/30"
+            style={{
+              background: avatarData.color,
+              boxShadow: '0 0 12px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            {story.author.substring(0, 1).toUpperCase()}
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -155,12 +181,19 @@ function StoryCard({ story }) {
 }
 
 function PoetryCard({ story }) {
+  const avatarData = generateAvatar(story.author)
   return (
     <div className="card-glass space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
-            {story.author.charAt(0)}
+          <div 
+            className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm border border-blue-400/30"
+            style={{
+              background: avatarData.color,
+              boxShadow: '0 0 8px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            {story.author.substring(0, 1).toUpperCase()}
           </div>
           <div>
             <p className="font-semibold text-white">{story.author}</p>

@@ -5,9 +5,10 @@ import Sidebar from '../components/Sidebar'
 import Feed from '../components/Feed'
 import RightPanel from '../components/RightPanel'
 import CreateSection from '../components/CreateSection'
+import SettingsPage from './Settings'
 import { mockUserProjects, mockTrendingContent } from '../services/mockData'
 
-export default function Dashboard({ user, onLogout }) {
+export default function Dashboard({ user, onLogout, onUpdateUserProfile }) {
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeNav, setActiveNav] = useState('home')
@@ -61,16 +62,18 @@ export default function Dashboard({ user, onLogout }) {
             </div>
 
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-4 top-3 w-5 h-5 text-dark-muted" />
-              <input
-                type="text"
-                placeholder="Search stories, poems, comics..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-glass-lighter border border-dark-border rounded-lg pl-12 pr-4 py-3 text-white placeholder-dark-muted focus:outline-none focus:border-blue-400 transition-smooth"
-              />
-            </div>
+            {activeNav !== 'settings' && (
+              <div className="relative">
+                <Search className="absolute left-4 top-3 w-5 h-5 text-dark-muted" />
+                <input
+                  type="text"
+                  placeholder="Search stories, poems, comics..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-glass-lighter border border-dark-border rounded-lg pl-12 pr-4 py-3 text-white placeholder-dark-muted focus:outline-none focus:border-blue-400 transition-smooth"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -78,14 +81,21 @@ export default function Dashboard({ user, onLogout }) {
         <div className="flex-1 overflow-y-auto flex">
           {/* Middle Section */}
           <div className="flex-1">
+            {activeNav === 'settings' && (
+              <SettingsPage 
+                user={user} 
+                onUpdateUserProfile={onUpdateUserProfile} 
+                onNavigate={setActiveNav}
+              />
+            )}
             {activeNav === 'home' && <CreateSection onCreateClick={handleCreateClick} user={user} />}
-            {activeNav !== 'home' && (
+            {activeNav !== 'home' && activeNav !== 'settings' && (
               <Feed activeNav={activeNav} user={user} />
             )}
           </div>
 
           {/* Right Panel */}
-          <RightPanel user={user} />
+          {activeNav !== 'settings' && <RightPanel user={user} />}
         </div>
       </div>
     </div>

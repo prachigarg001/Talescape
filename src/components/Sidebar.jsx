@@ -1,6 +1,7 @@
 import React from 'react'
 import { Plus, Zap, BookMarked, Trophy, Settings, LogOut, Home, X } from 'lucide-react'
 import { BookOpen } from 'lucide-react'
+import { generateAvatar } from '../services/avatarService'
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen, activeNav, setActiveNav, user, onLogout }) {
   const navItems = [
@@ -57,12 +58,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeNav, setAct
       {/* Account Section */}
       <div className="border-t border-dark-border px-4 py-4 space-y-3">
         <div className="flex items-center gap-3 p-3 rounded-lg glass">
-          <div className={`w-10 h-10 rounded-full ${user.pfpColor} flex items-center justify-center text-white font-bold`}>
-            {user.username.charAt(0).toUpperCase()}
+          <div 
+            className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm border-2 border-blue-400/50 shadow-lg"
+            style={{
+              background: user.avatarColor || user.avatarData?.color || '#3b82f6',
+              boxShadow: '0 0 15px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            {user.username.substring(0, 2).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-white truncate">@{user.username}</p>
-            <p className="text-xs text-dark-muted truncate">{user.email}</p>
+            <p className="text-xs text-dark-muted truncate">{user.email || 'Anonymous'}</p>
           </div>
         </div>
 

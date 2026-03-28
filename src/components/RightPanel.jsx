@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ChevronLeft, ChevronRight, BookOpen, Award } from 'lucide-react'
 import { mockBadges, mockLeaderboard } from '../services/mockData'
+import { generateAvatar } from '../services/avatarService'
 
 export default function RightPanel({ user }) {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -113,24 +114,33 @@ export default function RightPanel({ user }) {
         </h3>
 
         <div className="space-y-2">
-          {topCreators.map((creator) => (
-            <div
-              key={creator.rank}
-              className="glass rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-glass-light transition-smooth"
-            >
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                <span className="text-sm font-bold text-blue-400 flex-shrink-0">#{creator.rank}</span>
-                <div className={`w-6 h-6 rounded-full ${creator.pfpColor} flex items-center justify-center text-white text-xs font-bold flex-shrink-0`}>
-                  {creator.name.charAt(0)}
+          {topCreators.map((creator) => {
+            const avatarData = generateAvatar(creator.name)
+            return (
+              <div
+                key={creator.rank}
+                className="glass rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-glass-light transition-smooth"
+              >
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <span className="text-sm font-bold text-blue-400 flex-shrink-0">#{creator.rank}</span>
+                  <div 
+                    className="w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0 border border-blue-400/30"
+                    style={{
+                      background: avatarData.color,
+                      boxShadow: '0 0 8px rgba(59, 130, 246, 0.3)'
+                    }}
+                  >
+                    {creator.name.substring(0, 1).toUpperCase()}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-white truncate">{creator.name}</p>
+                    <p className="text-xs text-dark-muted">{creator.points} pts</p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold text-white truncate">{creator.name}</p>
-                  <p className="text-xs text-dark-muted">{creator.points} pts</p>
-                </div>
+                {creator.badge && <span className="text-sm flex-shrink-0">{creator.badge}</span>}
               </div>
-              {creator.badge && <span className="text-sm flex-shrink-0">{creator.badge}</span>}
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
