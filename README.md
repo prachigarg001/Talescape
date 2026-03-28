@@ -131,50 +131,46 @@ The optimized build will be in the `dist/` folder.
 ### Preview Production Build
 
 ```bash
-npm run preview
 ```
+# Talescape 📖✨
 
-## Usage
+A modern, full-featured creative writing platform where poets, storytellers, and comic creators connect, create, and compete.
 
-### Landing Page
-- Visit the home page to see platform features
-- Click "Get Started" to begin
+## Features
 
-### Authentication
-1. Click "Get Started" or navigate to login
-2. Choose:
-   - Email/Password signup
-   - Google OAuth
-   - GitHub OAuth
-3. Set username and profile color (optional)
+### 🎨 Modern UI/UX
+- **Dark Theme** with glassmorphism and neumorphism effects
+- **Fully Responsive** design (mobile, tablet, desktop)
+- **Smooth Animations** and transitions
+- **Professional Typography** and color scheme
 
-### Dashboard Navigation
-- **Home**: View community activity and create new content
-- **My Books**: View your stories
-- **Comics**: View your comics
-- **Poetry**: View your poems
-- **Community**: Follow creators and see their activity
-- **Leaderboard**: View top creators
-- **Settings**: Account settings
+### 🔐 Authentication
+- Email/Password signup and login
+- Google OAuth integration
+- GitHub OAuth integration
+- Anonymous user generation (e.g., "ShadowWriter123")
+- Profile color customization
 
-### Creating Content
-1. Click "Create Comic", "Write Story", or "Compose Poetry"
-2. Use the rich text editor to compose
-3. Save as draft or publish immediately
-4. Share with the community
+### 📝 Dashboard
+- **Collapsible Sidebar** with navigation menu
+- **Search functionality** for stories, poems, and comics
+- **Welcome message** with time-based greetings
+- **Create section** with three card types: Story, Poetry, Comic
+- **Projects display** with edit and view options
+- **Trending content** section with rankings
 
-### Interacting with Content
-- **Like**: Click the heart icon to like posts
-- **Comment**: Add comments to any post
-- **Share**: Share posts with others
-- **View**: Track view counts
+### ✍️ Rich Text Editor
+- **React Quill** integration with full toolbar
+- Font selection and text formatting (bold, italic, underline)
+- Color and background styling
+- Code blocks and blockquotes
+- List support (ordered/bullet)
+- Link insertion
+- **Save Draft** functionality
+- **Publish** with content type selection
 
-## Features Demo
-
-### Authentication Flow
-- Signup as anonymous user or with email
-- Google/GitHub OAuth ready
-- User session persisted in localStorage
+### 💬 Social Interactions
+- **Like button** with dynamic count
 
 ### Content Creation
 - Title input with auto-focus
